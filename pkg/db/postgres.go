@@ -18,14 +18,14 @@ type DatabaseConfig struct {
 }
 
 func InitDatabaseConfig() DatabaseConfig {
-  return DatabaseConfig{
-    Port: os.Getenv("POSTGRES_PORT"),
-    Host: os.Getenv("POSTGRES_HOST"),
-    User: os.Getenv("POSTGRES_USER"),
-    Password: os.Getenv("POSTGRES_PASSWORD"),
-    DBName: os.Getenv("POSTGRES_DB"),
-    SSLMode: os.Getenv("SSLMODE"),
-  } 
+	return DatabaseConfig{
+		Port:     os.Getenv("POSTGRES_PORT"),
+		Host:     os.Getenv("POSTGRES_HOST"),
+		User:     os.Getenv("POSTGRES_USER"),
+		Password: os.Getenv("POSTGRES_PASSWORD"),
+		DBName:   os.Getenv("POSTGRES_DB"),
+		SSLMode:  os.Getenv("SSLMODE"),
+	}
 }
 
 func (cfg DatabaseConfig) DBConnect() (*sqlx.DB, error) {
@@ -35,11 +35,6 @@ func (cfg DatabaseConfig) DBConnect() (*sqlx.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// db.MustExec(`CREATE TABLE test (
- //    name text,
- //    age integer
- //  );`)
 
 	return db, nil
 }

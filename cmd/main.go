@@ -11,12 +11,23 @@ import (
 
 	urlshortener "github.com/Str1kez/url-shortener"
 	"github.com/Str1kez/url-shortener/pkg/db"
+	"github.com/Str1kez/url-shortener/pkg/handler"
 	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
 )
+
+func initConfig() error {
+	viper.SetConfigFile("config/config.yaml")
+	return viper.ReadInConfig()
+}
 
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("Can't load envs from .env\n%s\n", err)
+	}
+
+	if err := initConfig(); err != nil {
+		log.Fatalf("Error in parsing config file\n%s\n", err)
 	}
 
 	dbConfig := db.InitDatabaseConfig()
@@ -32,8 +43,11 @@ func main() {
 	signal.Notify(terminate, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
 
 	server := urlshortener.Server{}
+	handler := handler.Handler{}
+
 	go func() {
-		if err = server.Run("8001"); err != nil && err != http.ErrServerClosed {
+		host, port := viper.GetString("host"), viper.GetString("port")
+		if err = server.Run(host, port, handler.InitRouters()); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Error on server startup\n%s\n", err)
 		}
 	}()
@@ -43,5 +57,8 @@ func main() {
 	defer cancel()
 	if err = server.Shutdown(ctx); err != nil {
 		log.Fatalf("Error in shutting down\n%s\n", err)
+	}
+	if err = db.Close(); err != nil {
+		log.Fatalf("Error in closing connection with db\n%s\n", err)
 	}
 }
