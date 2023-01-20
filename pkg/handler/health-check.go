@@ -10,7 +10,7 @@ type message struct {
 	Message string `json:"message"`
 }
 
-func (h *Handler) healthCheckHandler(ctx *gin.Context) {
+func (h *Handler) healthCheck(ctx *gin.Context) {
 	msg := message{"Hello, I'm fine"}
 	ctx.JSON(http.StatusOK, msg)
 }

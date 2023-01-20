@@ -7,9 +7,9 @@ import (
 
 type Shortener interface {
 	Create(url string) (*schema.ShortenerResponse, error)
-	Get(shortUrl string)
-	GetInfo(secret string)
-	Delete(secret string)
+	Get(shortUrl string) (string, error)
+	GetInfo(secret string) (*schema.InfoResponse, error)
+	Delete(secret string) error
 }
 
 type DbModel struct {

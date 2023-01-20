@@ -32,18 +32,18 @@ func main() {
 
 	dbConfig := db.InitDatabaseConfig()
 
-	db, err := dbConfig.DBConnect()
+	database, err := dbConfig.DBConnect()
 	if err != nil {
 		log.Fatalf("Error in DB connection\n%s\n", err)
 	}
-
-	db.Ping()
 
 	terminate := make(chan os.Signal, 1)
 	signal.Notify(terminate, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
 
 	server := urlshortener.Server{}
-	handler := handler.Handler{}
+
+  dbModel := db.NewDbModel(database) 
+  handler := handler.Handler{Model: dbModel}
 
 	go func() {
 		host, port := viper.GetString("host"), viper.GetString("port")
@@ -58,7 +58,7 @@ func main() {
 	if err = server.Shutdown(ctx); err != nil {
 		log.Fatalf("Error in shutting down\n%s\n", err)
 	}
-	if err = db.Close(); err != nil {
+	if err = database.Close(); err != nil {
 		log.Fatalf("Error in closing connection with db\n%s\n", err)
 	}
 }
