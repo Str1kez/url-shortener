@@ -8,3 +8,4 @@ CREATE TABLE IF NOT EXISTS urlshortener (
 );
 
 CREATE INDEX IF NOT EXISTS urlshortener_long_url ON urlshortener (long_url);
+CREATE INDEX IF NOT EXISTS urlshortener_short_url ON urlshortener (short_url);
