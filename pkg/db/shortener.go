@@ -2,7 +2,6 @@ package db
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"math/rand"
 	"time"
@@ -60,14 +59,22 @@ func (s *ShortenerPostgres) Create(url string) (*schema.ShortenerResponse, error
 			SecretKey: secretKey,
 		}, nil
 	case <-time.After(time.Second):
-		return nil, errors.New("timeout: finding unique shorturl")
+		return nil, &Timeout{}
 	}
 }
 
 func (s *ShortenerPostgres) Get(shortUrl string) (string, error) {
-	fullUrl := "https://ya.ru"
+	var longUrl string
 
-	return fullUrl, nil
+	query := fmt.Sprintf(`SELECT long_url FROM %s WHERE short_url=$1`, tablename)
+	row := s.db.QueryRow(query, shortUrl)
+	if err := row.Scan(&longUrl); err != nil {
+		if err == sql.ErrNoRows {
+			return "", &NoResultFound{}
+		}
+		return "", err
+	}
+	return longUrl, nil
 }
 
 func (s *ShortenerPostgres) GetInfo(secret string) (*schema.InfoResponse, error) {
