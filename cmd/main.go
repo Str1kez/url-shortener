@@ -23,7 +23,7 @@ func initConfig() error {
 
 func main() {
 	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Can't load envs from .env\n%s\n", err)
+		log.Printf("Can't load envs from .env\n%s\n", err)
 	}
 
 	if err := initConfig(); err != nil {
@@ -42,8 +42,8 @@ func main() {
 
 	server := urlshortener.Server{}
 
-  dbModel := db.NewDbModel(database) 
-  handler := handler.Handler{Model: dbModel}
+	dbModel := db.NewDbModel(database)
+	handler := handler.Handler{Model: dbModel}
 
 	go func() {
 		host, port := viper.GetString("host"), viper.GetString("port")

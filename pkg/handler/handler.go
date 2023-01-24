@@ -7,7 +7,7 @@ import (
 )
 
 type Handler struct {
-  Model *db.DbModel
+	Model *db.DbModel
 }
 
 func (h *Handler) InitRouters() *gin.Engine {

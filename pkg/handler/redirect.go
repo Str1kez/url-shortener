@@ -16,5 +16,5 @@ func (h *Handler) redirect(ctx *gin.Context) {
 		return
 	}
 
-	ctx.Redirect(http.StatusMovedPermanently, longUrl)
+	ctx.Redirect(http.StatusTemporaryRedirect, longUrl)
 }
