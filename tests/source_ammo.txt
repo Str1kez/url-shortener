@@ -1,0 +1,4 @@
+POST||/api/v1/make_shortener||||{"url": "https://ya.ru"}
+POST||/api/v1/make_shortener||||{"url": "https://google.com"}
+POST||/api/v1/make_shortener||||{"url": "https://vc.ru"}
+POST||/api/v1/make_shortener||||{"url": "https://youtube.com"}
