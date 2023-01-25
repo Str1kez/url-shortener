@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -13,6 +12,7 @@ import (
 	"github.com/Str1kez/url-shortener/pkg/db"
 	"github.com/Str1kez/url-shortener/pkg/handler"
 	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
@@ -21,10 +21,23 @@ func initConfig() error {
 	return viper.ReadInConfig()
 }
 
+func initLog() {
+	log.SetOutput(os.Stdout)
+	if os.Getenv("GIN_MODE") == "debug" {
+		log.SetLevel(log.DebugLevel)
+		log.SetFormatter(&log.TextFormatter{})
+	} else {
+		log.SetFormatter(&log.JSONFormatter{})
+		log.SetLevel(log.WarnLevel)
+	}
+}
+
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Printf("Can't load envs from .env\n%s\n", err)
 	}
+
+	initLog()
 
 	if err := initConfig(); err != nil {
 		log.Fatalf("Error in parsing config file\n%s\n", err)

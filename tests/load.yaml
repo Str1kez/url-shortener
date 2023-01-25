@@ -7,7 +7,7 @@ phantom:
   ammofile: /var/loadtest/ammo.txt
   load_profile:
     load_type: rps # schedule load by defining requests per second
-    schedule: line(10, 5000, 5m) 
+    schedule: line(10, 50000, 5m) 
 console:
   enabled: true # enable console output
 telegraf:

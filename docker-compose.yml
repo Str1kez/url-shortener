@@ -44,11 +44,11 @@ services:
     ports:
       - 8001:8001
     environment:
-      - POSTGRES_HOST=db
+      - POSTGRES_HOST=bouncer
       - POSTGRES_PORT=5432
+      - GIN_MODE=release
     depends_on:
       - bouncer
-        # condition: service_healthy
 
 volumes:
   db-data:

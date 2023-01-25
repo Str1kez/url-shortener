@@ -8,6 +8,7 @@ import (
 
 	"github.com/Str1kez/url-shortener/schema"
 	"github.com/jmoiron/sqlx"
+	"github.com/sirupsen/logrus"
 )
 
 type ShortenerPostgres struct {
@@ -31,6 +32,7 @@ func (s *ShortenerPostgres) Create(url string) (*schema.ShortenerResponse, error
 	query := fmt.Sprintf(`SELECT short_url, id FROM %s WHERE long_url=$1 AND active=true`, tablename)
 	row := s.db.QueryRow(query, url)
 	if err = row.Scan(&shortUrl, &secretKey); err != nil && err != sql.ErrNoRows {
+		logrus.Error("Can't parse row", err)
 		return nil, err
 	}
 	if err == nil {
@@ -52,6 +54,7 @@ func (s *ShortenerPostgres) Create(url string) (*schema.ShortenerResponse, error
 		query = fmt.Sprintf(`INSERT INTO %s (short_url, long_url) VALUES ($1, $2) RETURNING id`, tablename)
 		row = s.db.QueryRow(query, shortUrl, url)
 		if err = row.Scan(&secretKey); err != nil {
+			logrus.Error("Can't parse row", err)
 			return nil, err
 		}
 		return &schema.ShortenerResponse{
@@ -59,6 +62,7 @@ func (s *ShortenerPostgres) Create(url string) (*schema.ShortenerResponse, error
 			SecretKey: secretKey,
 		}, nil
 	case <-time.After(time.Second):
+		logrus.Warn("Couldn't find unique short_url")
 		return nil, &Timeout{}
 	}
 }
@@ -77,6 +81,7 @@ func (s *ShortenerPostgres) Get(shortUrl string) (string, error) {
 
 	tx, err := s.db.Beginx()
 	if err != nil {
+		logrus.Error("Can't begin transaction", err)
 		return "", err
 	}
 
@@ -86,11 +91,13 @@ func (s *ShortenerPostgres) Get(shortUrl string) (string, error) {
 	row = tx.QueryRowx(query, shortUrl)
 
 	if err := row.Err(); err != nil {
-    tx.Rollback()
+		logrus.Error("Can't parse row", err)
+		tx.Rollback()
 		return "", err
 	}
 
 	if err := tx.Commit(); err != nil {
+		logrus.Error("Can't commit transaction", err)
 		tx.Rollback()
 		return "", err
 	}
@@ -109,6 +116,7 @@ func (s *ShortenerPostgres) GetInfo(secret string) (*schema.InfoResponse, error)
 		if err == sql.ErrNoRows {
 			return nil, &NoResultFound{}
 		}
+		logrus.Error("Can't parse row", err)
 		return nil, err
 	}
 
@@ -119,6 +127,7 @@ func (s *ShortenerPostgres) Delete(secret string) error {
 
 	tx, err := s.db.Beginx()
 	if err != nil {
+		logrus.Error("Can't begin transaction", err)
 		return err
 	}
 
@@ -127,11 +136,13 @@ func (s *ShortenerPostgres) Delete(secret string) error {
                         WHERE id=$1`, tablename)
 	row := tx.QueryRowx(query, secret)
 	if err = row.Err(); err != nil {
-    tx.Rollback()
+		logrus.Error("Can't parse row", err)
+		tx.Rollback()
 		return err
 	}
 
 	if err = tx.Commit(); err != nil {
+		logrus.Error("Can't commit transaction", err)
 		tx.Rollback()
 		return err
 	}
@@ -153,6 +164,7 @@ func makeShort(db *sqlx.DB, cancelCh chan<- string, errCh chan<- error) {
 		query := fmt.Sprintf(`SELECT EXISTS (SELECT 1 FROM %s WHERE short_url=$1 AND active=true)`, tablename)
 		row := db.QueryRow(query, shortUrl)
 		if err := row.Scan(&isExists); err != nil {
+			logrus.Error("Can't get successful response", err)
 			errCh <- err
 			return
 		}

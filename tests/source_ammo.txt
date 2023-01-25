@@ -2,3 +2,12 @@ POST||/api/v1/make_shortener||||{"url": "https://ya.ru"}
 POST||/api/v1/make_shortener||||{"url": "https://google.com"}
 POST||/api/v1/make_shortener||||{"url": "https://vc.ru"}
 POST||/api/v1/make_shortener||||{"url": "https://youtube.com"}
+GET||/api/v1/admin/f3d78772-52ac-48b3-b1c6-1034e98934af||||
+GET||/api/v1/admin/0877a23e-fa3f-459c-bfe9-33c2bd1dcacc||||
+GET||/api/v1/admin/89b7fe26-ed36-47ec-8452-52629f7d5d29||||
+GET||/api/v1/admin/d5bdd3dc-39de-4e51-bec2-ae70037ab904||||
+GET||/api/v1/BJLEZ||||
+GET||/api/v1/ULBHP||||
+GET||/api/v1/1AK02||||
+GET||/api/v1/JF2WO||||
+GET||/api/v1/QDVFR||||

@@ -6,6 +6,7 @@ import (
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
+	"github.com/sirupsen/logrus"
 )
 
 type DatabaseConfig struct {
@@ -33,8 +34,11 @@ func (cfg DatabaseConfig) DBConnect() (*sqlx.DB, error) {
 		cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.DBName, cfg.SSLMode))
 
 	if err != nil {
+		logrus.Error("Connection on DB", err)
 		return nil, err
 	}
 
+	db.SetMaxIdleConns(300)
+	db.SetMaxOpenConns(500)
 	return db, nil
 }

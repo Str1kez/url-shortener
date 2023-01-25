@@ -7,7 +7,9 @@ require (
 	github.com/jackc/pgx/v5 v5.2.0
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/joho/godotenv v1.4.0
+	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.14.0
+	github.com/toorop/gin-logrus v0.0.0-20210225092905-2c785434f26f
 )
 
 require (

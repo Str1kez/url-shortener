@@ -3,7 +3,9 @@ package handler
 import (
 	"github.com/Str1kez/url-shortener/pkg/db"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	ginlogrus "github.com/toorop/gin-logrus"
 )
 
 type Handler struct {
@@ -12,6 +14,7 @@ type Handler struct {
 
 func (h *Handler) InitRouters() *gin.Engine {
 	router := gin.New()
+	router.Use(ginlogrus.Logger(logrus.StandardLogger()), gin.Recovery())
 
 	apiRouter := router.Group(viper.GetString("prefix"))
 	{
