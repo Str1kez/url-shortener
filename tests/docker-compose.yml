@@ -1,0 +1,15 @@
+version: "3.2"
+services:
+  loadtest:
+    container_name: yandex-tank
+    image: direvius/yandex-tank
+    volumes:
+      - ./load.yaml:/var/loadtest/load.yaml
+      - ./ammo.txt:/var/loadtest/ammo.txt
+      # - $SSH_AUTH_SOCK:/ssh-agent -e SSH_AUTH_SOCK=/ssh-agent
+
+networks:
+  default:
+    name: load-test-net
+    external: true
+

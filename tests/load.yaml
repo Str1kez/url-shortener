@@ -1,0 +1,13 @@
+phantom:
+  address: shortener:8001 # [Target's address]:[target's port]
+  ammofile: /var/loadtest/ammo.txt
+  load_profile:
+    load_type: rps # schedule load by defining requests per second
+    schedule: line(10, 5000, 5m) 
+console:
+  enabled: true # enable console output
+telegraf:
+  enabled: false # let's disable telegraf monitoring for the first time
+autostop:
+  autostop:
+    - http(5xx, 70%, 1s)

@@ -1,0 +1,36 @@
+156 
+POST /api/v1/make_shortener HTTP/1.1
+Host: hostname.com
+User-Agent: tank
+Accept: */*
+Connection: Close
+Content-Length: 24
+
+{"url": "https://ya.ru"}
+161 
+POST /api/v1/make_shortener HTTP/1.1
+Host: hostname.com
+User-Agent: tank
+Accept: */*
+Connection: Close
+Content-Length: 29
+
+{"url": "https://google.com"}
+156 
+POST /api/v1/make_shortener HTTP/1.1
+Host: hostname.com
+User-Agent: tank
+Accept: */*
+Connection: Close
+Content-Length: 24
+
+{"url": "https://vc.ru"}
+162 
+POST /api/v1/make_shortener HTTP/1.1
+Host: hostname.com
+User-Agent: tank
+Accept: */*
+Connection: Close
+Content-Length: 30
+
+{"url": "https://youtube.com"}

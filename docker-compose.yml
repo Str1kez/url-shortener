@@ -32,3 +32,8 @@ services:
 
 volumes:
   db-data:
+
+networks:
+  default:
+    name: load-test-net
+
