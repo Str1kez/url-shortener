@@ -1,3 +1,7 @@
+overload:
+  enabled: true
+  package: yandextank.plugins.DataUploader
+  token_file: /var/loadtest/token.txt
 phantom:
   address: shortener:8001 # [Target's address]:[target's port]
   ammofile: /var/loadtest/ammo.txt

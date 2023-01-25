@@ -6,6 +6,7 @@ services:
     volumes:
       - ./load.yaml:/var/loadtest/load.yaml
       - ./ammo.txt:/var/loadtest/ammo.txt
+      - ./token.txt:/var/loadtest/token.txt
       # - $SSH_AUTH_SOCK:/ssh-agent -e SSH_AUTH_SOCK=/ssh-agent
 
 networks:

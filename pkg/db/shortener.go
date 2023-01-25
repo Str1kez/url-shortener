@@ -86,6 +86,7 @@ func (s *ShortenerPostgres) Get(shortUrl string) (string, error) {
 	row = tx.QueryRowx(query, shortUrl)
 
 	if err := row.Err(); err != nil {
+    tx.Rollback()
 		return "", err
 	}
 
@@ -126,6 +127,7 @@ func (s *ShortenerPostgres) Delete(secret string) error {
                         WHERE id=$1`, tablename)
 	row := tx.QueryRowx(query, secret)
 	if err = row.Err(); err != nil {
+    tx.Rollback()
 		return err
 	}
 
