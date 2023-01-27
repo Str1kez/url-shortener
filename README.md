@@ -1,5 +1,7 @@
 # URL Shortener
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/Str1kez/url-shortener)](https://goreportcard.com/report/github.com/Str1kez/url-shortener)
+
 ## Запуск
 ```commandline
 make env
